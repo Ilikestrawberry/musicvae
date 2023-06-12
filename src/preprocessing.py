@@ -29,11 +29,7 @@ IDX2MIDI = {
 }
 
 DRUM2IDX = {drum: i for i, drum in enumerate(DRUM2MIDI.keys())}
-MIDI2IDX = {
-    midi_num: DRUM2IDX[drum]
-    for drum, midi_nums in DRUM2MIDI.items()
-    for midi_num in midi_nums
-}
+MIDI2IDX = {midi_num: DRUM2IDX[drum] for drum, midi_nums in DRUM2MIDI.items() for midi_num in midi_nums}
 
 
 def check_time_signature(pm, num=4, denom=4):
@@ -77,9 +73,7 @@ def quantize_drum(inst, fs, start_time, comp=9):
 
     # 비트가 들어갈 수 있는 time stamp
     quantize_time = np.arange(start_time, end_time + fs_time, fs_time)
-    drum_roll = np.zeros(
-        (quantize_time.shape[0], comp)
-    )  # shape: (비트 들어갈 수 있는 time stamp, 드럼 소리 가지 수(9)
+    drum_roll = np.zeros((quantize_time.shape[0], comp))  # shape: (비트 들어갈 수 있는 time stamp, 드럼 소리 가지 수(9)
 
     for _, note in enumerate(inst.notes):
         # pitch 번호가 dic에 없는 경우엔 패스
@@ -182,9 +176,7 @@ def transform_to_midi(roll, fs, comp=9):
         for j in range(0, len(drum_sound)):
             if drum_sound[j] == "1":
                 pitch = IDX2MIDI[j]
-                inst.notes.append(
-                    pretty_midi.Note(80, pitch, start_time, end_time)
-                )  # 80: velocity(세기)
+                inst.notes.append(pretty_midi.Note(80, pitch, start_time, end_time))  # 80: velocity(세기)
 
     return pm
 
@@ -197,7 +189,7 @@ def data_preprocessing(file_list):
     print("Data preprocessing...")
 
     for f_name in tqdm(file_list):
-        file_path = "groove/" + f_name
+        file_path = "./data/groove/" + f_name
         try:
             # 파일을 midi 형태로 로드
             pm = pretty_midi.PrettyMIDI(file_path)
