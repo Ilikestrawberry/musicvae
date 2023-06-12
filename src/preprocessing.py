@@ -88,12 +88,11 @@ def quantize_drum(inst, fs, start_time, comp=9):
             end_idx += 1
 
         range_idx = np.arange(start_idx, end_idx, 1)
-        inst_idx = MIDI2IDX(note.pitch)
+        inst_idx = MIDI2IDX[note.pitch]
 
         for idx in range_idx:
             # idx 번 째 time stamp에 inst_idx 소리를 입력
             drum_roll[idx, inst_idx] = 1
-
     return drum_roll
 
 
@@ -212,8 +211,11 @@ def data_preprocessing(file_list):
             for inst in pm.instruments:
                 if inst.is_drum == True:
                     drum_roll = quantize_drum(inst, fs, start_time)
+                    print("1", drum_roll.shape)
                     drum_roll = windowing(drum_roll)
+                    print("2", drum_roll.shape)
                     drum_roll = one_hot_encoding(drum_roll)
+                    print("3", drum_roll.shape)
                     for i in range(0, drum_roll.shape[0]):
                         data.append(coo_matrix(drum_roll[i]))  # 희소배열을 coordinate(저용량)
         except:
