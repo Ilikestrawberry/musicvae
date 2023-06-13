@@ -144,7 +144,7 @@ class Trainer:
             pred, mu, std = self.model(batch)
             pred = pred
             if self.criterion == "elbo":
-                loss = ELBO_loss(pred, batch, mu, std)
+                loss = ELBO_loss(pred, batch, mu, std, self.max_epoch)
             losses.append(loss.item())
 
             acc = self.eval_func(pred, batch)
