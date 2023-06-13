@@ -47,6 +47,9 @@ else:
         zip_ref.extractall("./data")
     # 다운로드한 ZIP 파일 삭제
     os.remove(filename)
+    info = pd.read_csv("./data/groove/info.csv")
+    file_list = info.midi_filename
+    data = data_preprocessing(file_list)
 
 
 n_data = len(data)
