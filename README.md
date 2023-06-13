@@ -77,7 +77,7 @@ ELBO는 두 개의 항으로 나누어지는데, 첫번쨰 항은 encoder에 x�
 ### Loss function
 학습에 사용하는 loss 값은 위에서 언급한 reconstruction과 regularization의 부호를 바꾼 ELBO loss값을 사용한다. 이 값을 줄이는 것이 모델의 성능을 높이는 것을 의미하기 때문이다.
 
-Reconstruction error를 줄이는 과정에서 decoder 파라미터가 최적화되고, regularization error를 줄이는 과정에서 encoder의 파라미터가 최적화된다.
+Reconstruction error를 줄이는 과정에서 encoder와 decoder 파라미터가 최적화되고, regularization error를 줄이는 과정에서 encoder의 파라미터가 최적화된다.
 
 1. Encoder가 입력 데이터를 처리하고 z의 평균, 표준편차에 대한 추정값을 출력.
 2. Reparameterization trick을 통해 z의 샘플 생성.
