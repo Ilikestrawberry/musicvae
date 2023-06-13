@@ -74,9 +74,10 @@ class MusicVAE(nn.Module):
 
     def generate(self, bar_units=16, seq_len=64):
         """
-        정규분포 z를 입력으로 학습된 model에서 midi를 생성
+        정규분포 z를 입력으로 학습된 decoder를 거쳐 midi 생성
 
         z shape: (1, 512)
+        outputs shape: (1, 64, 512)
         """
         z = torch.empty((1, 512)).normal_(mean=0, std=1).to(device)
         feat = self.conductor(z)
@@ -84,7 +85,6 @@ class MusicVAE(nn.Module):
         hidden_size = self.decoder.hidden_size
         output_size = self.decoder.input_size
 
-        # 맨 처음 생성에는 정보가 없기 때문에 임의로 생성한 inputs을 입력으로 함
         inputs = torch.zeros((batch_size, 1, output_size), device=device)
         outputs = torch.zeros((batch_size, seq_len, output_size), device=device)
 
