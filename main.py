@@ -1,7 +1,4 @@
 import os
-import requests
-import zipfile
-import pickle
 
 import argparse
 from omegaconf import OmegaConf
@@ -12,11 +9,11 @@ from datetime import datetime
 import torch
 from torch.utils.data import DataLoader
 
-from src.preprocessing import data_preprocessing
 from src.dataloader import GrooveDataset
 from src.model import MusicVAE
-from src.utils import generation_midi_file, prob_label
+from src.utils import generate_midi_file, prob_label, prepare_data
 from src.trainer import Trainer
+
 
 global device
 
@@ -29,29 +26,8 @@ else:
 
 print("Using device: ", device)
 
-if os.path.isfile("./data/midi_data.pkl"):
-    with open("./data/midi_data.pkl", "rb") as f:
-        data = pickle.load(f)
-elif os.path.isfile("./data/groove"):
-    info = pd.read_csv("./data/groove/info.csv")
-    file_list = info.midi_filename
-    data = data_preprocessing(file_list)
-else:
-    # groove 데이터가 없는 경우 다운로드
-    url = "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0-midionly.zip"
-    response = requests.get(url)
-    filename = "groove-v1.0.0-midionly.zip"
-    with open(filename, "wb") as f:
-        f.write(response.content)
-    with zipfile.ZipFile(filename, "r") as zip_ref:
-        zip_ref.extractall("./data")
-    # 다운로드한 ZIP 파일 삭제
-    os.remove(filename)
-    info = pd.read_csv("./data/groove/info.csv")
-    file_list = info.midi_filename
-    data = data_preprocessing(file_list)
-
-
+# 데이터 준비
+data = prepare_data()
 n_data = len(data)
 train_set = GrooveDataset(data[: int(n_data * 0.9)])
 dev_set = GrooveDataset(data[int(n_data * 0.9) :])
@@ -84,7 +60,7 @@ def generate(conf):
 
     pred = pred.squeeze(0).numpy()
     generated_midi = prob_label(pred)
-    pm = generation_midi_file(generated_midi, fs=8)
+    pm = generate_midi_file(generated_midi, fs=8)
     file_path = os.path.join(conf.path.load_model_dir, f"{generated_time}_generated.midi")
     pm.write(file_path)
     print("MIDI file is generated!")
