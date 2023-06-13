@@ -68,7 +68,7 @@ VAE에서 목적함수는 p(x)이다.
 이를 풀어쓰면 ELBO 부분과 KL-divergence 부분으로 나누어지는데, KL-divergence는 항상 0보다 같거나 크기 때문에 logp(x) >= ELBO가 성립한다.
 
 즉, ELBO를 최대화하는 것이 p(x)를 최대화 하는 것이다.
-ELBO는 두 개의 항으로 나누어지는데, 첫번쨰 항은 encoder에 x가 입력됐을 때 decoder에서 x가 재구성되는 것을 의미한다. 이를 reconstruction term이라고 한다.
+ELBO는 두 개의 항으로 나누어지는데, 첫번째 항은 encoder에 x가 입력됐을 때 decoder에서 x가 재구성되는 것을 의미한다. 이를 reconstruction term이라고 한다.
 
 두번째 항은 encoder를 통해 얻은 q(z|x)와 conductor의 p(z)가 비슷한 정도를 의미한다. 만약 첫번째 항만 존재한다면 encoder의 입력값과 decoder의 출력값이 비슷하게 나오더라도 q(z|x)와 p(z)는 유사하지 않을 수도 있다. 하지만 두번째 항이 존재하기 때문에 비슷한 확률분포에서 샘플링된 값을 기반으로 encoder의 입력값과 decoder의 출력값이 비슷해지도록 모델이 학습된다. 이러한 이유로 regularization term이라고 부른다.
 
