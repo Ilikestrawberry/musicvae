@@ -46,10 +46,9 @@ def train(conf):
     train_dataloader = DataLoader(train_set, batch_size=conf.train.batch_size)
     dev_dataloader = DataLoader(dev_set, batch_size=conf.train.batch_size)
 
-    datalength = len(train_set)  # Trainer에서 Onecycle 스케줄러 인자 전달을 위한 값
     model = MusicVAE(conf).to(device)
 
-    trainer = Trainer(conf, model, datalength)
+    trainer = Trainer(conf, model)
     trainer.train(train_dataloader, dev_dataloader)
 
 
