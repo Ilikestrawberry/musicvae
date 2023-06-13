@@ -72,6 +72,8 @@ ELBO는 두 개의 항으로 나누어지는데, 첫번쨰 항은 encoder에 x�
 
 두번째 항은 encoder를 통해 얻은 q(z|x)와 conductor의 p(z)가 비슷한 정도를 의미한다. 만약 첫번째 항만 존재한다면 encoder의 입력값과 decoder의 출력값이 비슷하게 나오더라도 q(z|x)와 p(z)는 유사하지 않을 수도 있다. 하지만 두번째 항이 존재하기 때문에 비슷한 확률분포에서 샘플링된 값을 기반으로 encoder의 입력값과 decoder의 출력값이 비슷해지도록 모델이 학습된다. 이러한 이유로 regularization term이라고 부른다.
 
+------------
+
 ### Loss function
 학습에 사용하는 loss 값은 위에서 언급한 reconstruction과 regularization의 부호를 바꾼 ELBO loss값을 사용한다. 이 값을 줄이는 것이 모델의 성능을 높이는 것을 의미하기 때문이다.
 
