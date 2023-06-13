@@ -2,6 +2,10 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import pretty_midi
+import os
+import pandas as pd
+import pickle
+from src.preprocessing import data_preprocessing
 
 
 def accuracy(y_true, y_pred):
@@ -29,7 +33,7 @@ def prob_label(prob):
     return play
 
 
-def generation_midi_file(roll, fs, comp=9):
+def generate_midi_file(roll, fs, comp=9):
     """
     prob_label을 통해 표시된 드럼 소리를 미디파일로 변환
     """
@@ -77,3 +81,29 @@ def generation_midi_file(roll, fs, comp=9):
                 inst.notes.append(pretty_midi.Note(80, pitch, start_time, end_time))
 
     return pm
+
+
+def prepare_data():
+    if os.path.isfile("./data/midi_data.pkl"):
+        with open("./data/midi_data.pkl", "rb") as f:
+            data = pickle.load(f)
+    elif os.path.isfile("./data/groove"):
+        info = pd.read_csv("./data/groove/info.csv")
+        file_list = info.midi_filename
+        data = data_preprocessing(file_list)
+    else:
+        # groove 데이터가 없는 경우 다운로드
+        url = "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0-midionly.zip"
+        response = requests.get(url)
+        filename = "groove-v1.0.0-midionly.zip"
+        with open(filename, "wb") as f:
+            f.write(response.content)
+        with zipfile.ZipFile(filename, "r") as zip_ref:
+            zip_ref.extractall("./data")
+        # 다운로드한 ZIP 파일 삭제
+        os.remove(filename)
+        info = pd.read_csv("./data/groove/info.csv")
+        file_list = info.midi_filename
+        data = data_preprocessing(file_list)
+
+        return data
