@@ -134,7 +134,7 @@ class Encoder(nn.Module):
         std = nn.Softplus()(self.std(h))  # 논문 Eq 7
         eps = torch.randn_like(std)
         # z = mu + std를 그대로 사용하는 경우 z를 얻기 위해서 x를 항상 새로 샘플링해야 하는 문제가 발생
-        # 표준정규분포 eps를 도입해서 z와 x 사이 샘플링이 필요 없도록 함
+        # 표준정규분포 eps를 도입해서 z와 x 사이 샘플링 필수 조건을 없도록 함
         z = mu + (std * eps)  # 논문 Eq 2
 
         return z, mu, std
