@@ -2,11 +2,17 @@
 
 ## 논문 요약
 - 기존의 RNN 구조는 직전 데이터의 영향을 많이 받고 오래 전 데이터의 영향은 갈수록 줄어드는 문제점이 있음.
-- 계층적인(Hierarchical) 구조를 도입해 가까운 정보 뿐만 아니라 데이터 전체적인 정보를 반영할 수 있도록 함.
+- 계층적인(Hierarchical) 구조를 도입해 가까운 정보 뿐만 아니라 데이터 전체적인 정보(분포)를 반영할 수 있도록 함.
 - 이를 위해서 Variational Autoencoder(VAE) 구조를 활용하고 Encoder, Decoder 이외에 Conductor 구조를 추가.
+
 ### 과정
 - Encoder -> Conductor 과정: 실제분포 p(z)와 잠재분포 q(z)가 최대한 비슷해지도록 파라미터(λ) 학습.
 - Conductor -> Decoder 과정: q(z)에서 생성된 값을 decoder에 입력하여 encoder 입력값인 x와 decoder에서 생성된 x'의 차이가 최소화 되도록 파라미터(θ) 학습.
+
+### 모델 구조
+- Encoder: Bi-LSTM(I.512, H.2048)
+- Conductor: LSTM(I.512, H.1024)
+- Decoder: LSTM(I.1024(512+512), H.1024)
 
 ## 데이터 전처리
 - "groove-v1.0.0-midionly.zip" 데이터를 사용.
@@ -17,7 +23,11 @@
 5. 하나의 pickle 파일로 저장.
 
 ## 학습
+### Variational Inference
+- 
+
+
 - Optimizer: Adam
-- Scheduler: 
+- Criterion: ELBO loss
 
 ## 생성
