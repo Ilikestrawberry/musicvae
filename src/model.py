@@ -2,7 +2,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-global device
+
 if torch.backends.mps.is_available():
     device = torch.device("mps:0")
 elif torch.cuda.is_available():
