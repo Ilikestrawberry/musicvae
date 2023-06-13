@@ -1,4 +1,13 @@
 # MusicVAE
+## 실행 방법
+train
+
+    python main.py -mt
+
+
+generate
+
+    python main.py -mg
 
 ## 논문 요약
 - 기존의 RNN 구조는 직전 데이터의 영향을 많이 받고 오래 전 데이터의 영향은 갈수록 줄어드는 문제점이 있음.
