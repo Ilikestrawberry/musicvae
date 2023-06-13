@@ -1,13 +1,15 @@
 import os
 import requests
 import zipfile
-import torch
 import pickle
-import pandas as pd
-from datetime import datetime
+
 import argparse
 from omegaconf import OmegaConf
 
+import pandas as pd
+from datetime import datetime
+
+import torch
 from torch.utils.data import DataLoader
 
 from src.preprocessing import data_preprocessing
@@ -110,6 +112,3 @@ if __name__ == "__main__":
         print("실행모드를 다시 입력해주세요.")
         print("train        : t,\ttrain")
         print("generate    : g,\tgenerate")
-
-# batch_size, epoch, lr, save_epoch, wandb on/off, loss_func
-# generate_path
