@@ -1,6 +1,6 @@
 # MusicVAE
 ## 프로젝트 구조
-'''bash
+```bash
     musicvae
     ┣ config
     ┃ ┗ base_config.yaml
@@ -18,7 +18,7 @@
     ┣ README.md
     ┣ main.py
     ┗  requirements.txt
- '''
+```
 ## 실행 방법
 train
 
