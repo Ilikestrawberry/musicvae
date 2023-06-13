@@ -27,6 +27,7 @@ elif torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
+print("Using device: ", device)
 
 if os.path.isfile("./data/midi_data.pkl"):
     with open("./data/midi_data.pkl", "rb") as f:
