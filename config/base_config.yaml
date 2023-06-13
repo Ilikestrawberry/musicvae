@@ -1,0 +1,19 @@
+path:
+    save_model_dir: ./saved_model
+
+    # mode = generation 하는 경우 로드할 모델의 경로를 입력해주세요.
+    load_model_dir: ./saved_model/13-14-22
+    load_model_file: epoch_1.pt
+
+train:
+    max_epoch: 10
+    batch_size: 128
+    # 논문에서 사용한 lr=0.001
+    learning_rate: 0.001
+    # avaliable loss func: elbo
+    loss_func: elbo
+    save_period: 5
+    eval_period: 5
+    dropout: 0.2
+    # 애플 실리콘 mps 사용하는 경우 wandb와 충돌 오류 발생할 수 있음
+    wandb: False # wandb 사용 여부
