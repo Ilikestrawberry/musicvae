@@ -24,7 +24,9 @@ def accuracy(y_true, y_pred):
 def prob_label(prob):
     """
     model에서 생성된 확률분포 prob을 반영해서
-    prob[idx] 번 째에서의 소리(9가지 중 하나)를 라벨링
+    prob[idx] 번 째에서의 소리(512경우 중 하나)를 라벨링
+
+    prob shape: (64, 512)
     """
     num_classes = prob.shape[1]
     play = np.zeros(prob.shape)
