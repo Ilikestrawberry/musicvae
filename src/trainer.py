@@ -80,7 +80,7 @@ class Trainer:
             if self.criterion == "elbo":
                 loss = ELBO_loss(pred, batch, mu, std, epoch)
             avg_loss.append(loss.item())
-            iter_bar.set_description("Train Iter (lr=%5.5f, loss=%5.3f)" % (self.optimizer.param_groups[0]["lr"], loss.item()))
+            iter_bar.set_description("Train Iter (lr=%5.5f, loss=%5.3f)" % (self.optimizer.param_groups[0]["lr"], loss.item() / self.batch_size))
             loss.backward()
             self.optimizer.step()
             self.scheduler.step()
@@ -149,7 +149,7 @@ class Trainer:
 
             acc = self.eval_func(pred, batch)
             accuracies.append(acc)
-            iter_bar.set_description("Eval Iter (loss=%5.3f, acc=%5.5f)" % (loss.item(), acc.item()))
+            iter_bar.set_description("Eval Iter (acc=%5.5f, loss=%5.3f)" % (acc.item(), loss.item() / self.batch_size))
 
             if device == "mps0":
                 mps.empty_cache()
