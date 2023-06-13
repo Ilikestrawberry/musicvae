@@ -1,3 +1,7 @@
 data/groove
 settings.json
 .DS_Store
+*.midi
+*.pkl
+*.pt
+*.pyc

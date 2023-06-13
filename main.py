@@ -1,4 +1,6 @@
 import os
+import requests
+import zipfile
 import torch
 import pickle
 import pandas as pd
@@ -27,10 +29,21 @@ else:
 if os.path.isfile("./data/midi_data.pkl"):
     with open("./data/midi_data.pkl", "rb") as f:
         data = pickle.load(f)
-else:
+elif os.path.isfile("./data/groove"):
     info = pd.read_csv("./data/groove/info.csv")
     file_list = info.midi_filename
     data = data_preprocessing(file_list)
+else:
+    # groove 데이터가 없는 경우 다운로드
+    url = "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0-midionly.zip"
+    response = requests.get(url)
+    filename = "groove-v1.0.0-midionly.zip"
+    with open(filename, "wb") as f:
+        f.write(response.content)
+    with zipfile.ZipFile(filename, "r") as zip_ref:
+        zip_ref.extractall("./data")
+    # 다운로드한 ZIP 파일 삭제
+    os.remove(filename)
 
 
 n_data = len(data)
