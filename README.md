@@ -1,4 +1,24 @@
 # MusicVAE
+## 프로젝트 구조
+'''bash
+    musicvae
+    ┣ config
+    ┃ ┗ base_config.yaml
+    ┣ data
+    ┃ ┣ groove
+    ┣ images
+    ┣ saved_model
+    ┣ src
+    ┃ ┣ dataloader.py
+    ┃ ┣ loss.py
+    ┃ ┣ model.py
+    ┃ ┣ preprocessing.py
+    ┃ ┣ trainer.py
+    ┃ ┗ utils.py
+    ┣ README.md
+    ┣ main.py
+    ┗  requirements.txt
+ '''
 ## 실행 방법
 train
 
