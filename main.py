@@ -15,8 +15,6 @@ from src.utils import generate_midi_file, prob_label, prepare_data
 from src.trainer import Trainer
 
 
-global device
-
 if torch.backends.mps.is_available():
     device = torch.device("mps:0")
 elif torch.cuda.is_available():

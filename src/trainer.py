@@ -10,9 +10,6 @@ import wandb
 from src.loss import ELBO_loss
 from src.utils import accuracy
 
-
-global device
-
 if torch.backends.mps.is_available():
     device = torch.device("mps:0")
 elif torch.cuda.is_available():
