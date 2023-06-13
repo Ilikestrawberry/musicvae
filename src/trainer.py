@@ -62,7 +62,7 @@ class Trainer:
     def save(self, file_name="default"):
         save_dir = os.path.join(self.save_model_dir, self.train_start_time)
         os.makedirs(save_dir, exist_ok=True)
-        file_name = f"{file_name}.pt"
+        file_name = f"{file_name}_{self.batch_size}.pt"
         file_path = os.path.join(save_dir, file_name)
         torch.save(self.model.state_dict(), file_path)
 

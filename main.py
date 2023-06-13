@@ -61,7 +61,7 @@ def generate(conf):
     pred = pred.squeeze(0).numpy()
     generated_midi = prob_label(pred)
     pm = generate_midi_file(generated_midi, fs=8)
-    file_path = os.path.join(conf.path.load_model_dir, f"{generated_time}_generated.midi")
+    file_path = os.path.join(conf.path.load_model_dir, f"{generated_time}_{conf.path.load_model_file}.midi")
     pm.write(file_path)
     print("MIDI file is generated!")
 
