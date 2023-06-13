@@ -53,7 +53,7 @@ class Trainer:
 
     def init_model_parameters(self, model):
         """
-        처음 모델의 파라미터를 초기화
+        초기 모델 파라미터를 초기화
         """
         for p in model.parameters():
             if p.dim() > 1:
@@ -78,9 +78,9 @@ class Trainer:
             self.optimizer.zero_grad()
             pred, mu, std = self.model(batch)
             if self.criterion == "elbo":
-                loss = ELBO_loss(pred, batch, mu, std)
-            avg_loss.append(loss.item() * 100)
-            iter_bar.set_description("Train Iter (lr=%5.5f, loss=%5.5f)" % (self.optimizer.param_groups[0]["lr"], loss.item() * 100))
+                loss = ELBO_loss(pred, batch, mu, std, epoch)
+            avg_loss.append(loss.item())
+            iter_bar.set_description("Train Iter (lr=%5.5f, loss=%5.3f)" % (self.optimizer.param_groups[0]["lr"], loss.item()))
             loss.backward()
             self.optimizer.step()
             self.scheduler.step()
@@ -89,7 +89,7 @@ class Trainer:
                 wandb.log(
                     {
                         "epoch": epoch,
-                        "train loss": loss * 100,
+                        "train loss": loss,
                         "lr": self.optimizer.param_groups[0]["lr"],
                     }
                 )
@@ -145,11 +145,11 @@ class Trainer:
             pred = pred
             if self.criterion == "elbo":
                 loss = ELBO_loss(pred, batch, mu, std)
-            losses.append(loss.item() * 100)
+            losses.append(loss.item())
 
             acc = self.eval_func(pred, batch)
             accuracies.append(acc)
-            iter_bar.set_description("Eval Iter (loss=%5.5f, acc=%5.5f)" % (loss.item() * 100, acc.item()))
+            iter_bar.set_description("Eval Iter (loss=%5.3f, acc=%5.5f)" % (loss.item(), acc.item()))
 
             if device == "mps0":
                 mps.empty_cache()
