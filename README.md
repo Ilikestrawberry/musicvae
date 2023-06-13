@@ -35,7 +35,7 @@ generate
 - 이를 위해서 Variational Autoencoder(VAE) 구조를 활용하고 Encoder, Decoder 이외에 Conductor 구조를 추가.
 
 ### 과정
-- Encoder -> Conductor 과정: 실제분포 q(z)와 잠재분포 p(z|x)가 최대한 비슷해지도록 파라미터(λ) 학습.
+- Encoder -> Conductor 과정: prior p(z)와 posterior q(z|x)가 최대한 비슷해지도록 파라미터(λ) 학습.
 - Conductor -> Decoder 과정: p(z|x)에서 생성된 값을 decoder에 입력하여 encoder 입력값인 x와 decoder에서 생성된 x'의 차이가 최소화 되도록 파라미터(θ) 학습.
 
 ### 모델 구조
@@ -59,16 +59,36 @@ generate
 
 VAE의 목적은 p(x)를 최대화하는 것을 목적으로 한다. 쉽게 이야기해서 입력 x가 주어졌을 때, z에서 샘플링된 입력값을 받은 decoder가 아웃풋으로 x를 낼 확률을 최대화 하는 것이다.
 
-VAE에서 목적함수는 p(x)이다.
 ![logpx](images/logpx.png)
 
-이를 풀어쓰면 ELBO 부분과 KL-divergence 부분으로 나누어지는데, KL-divergence는 항상 0보다 같거나 크기 때문에 logp(x) >= ELBO가 성립한다.
+VAE에서 목적함수는 p(x)이다.
+
 ![elbo](images/elbo.png)
 
-즉, ELBO를 최대화하는 것이 p(x)를 최대화 하는 것이다.
-ELBO는 두 개의 항으로 나누어지는데, 첫번쨰 항은 encoder에 x가 입력됐을 때 decoder에서 x가 재구성되는 것을 의미한다. 이를 Reconstruction term이라고 한다.
+이를 풀어쓰면 ELBO 부분과 KL-divergence 부분으로 나누어지는데, KL-divergence는 항상 0보다 같거나 크기 때문에 logp(x) >= ELBO가 성립한다.
 
-두번째 항은 encoder를 통해 얻은 q(z|x)와 conductor의 p(z)가 비슷한 정도를 의미한다. 만약 첫번째 항만 존재한다면 encoder의 입력값과 decoder의 출력값이 비슷하게 나오더라도 q(z|x)와 p(z)는 유사하지 않을 수도 있다. 하지만 두번째 항이 존재하기 때문에 비슷한 확률분포에서 샘플링된 값을 기반으로 encoder의 입력값과 decoder의 출력값이 비슷해지도록 모델이 학습된다.
+즉, ELBO를 최대화하는 것이 p(x)를 최대화 하는 것이다.
+ELBO는 두 개의 항으로 나누어지는데, 첫번쨰 항은 encoder에 x가 입력됐을 때 decoder에서 x가 재구성되는 것을 의미한다. 이를 reconstruction term이라고 한다.
+
+두번째 항은 encoder를 통해 얻은 q(z|x)와 conductor의 p(z)가 비슷한 정도를 의미한다. 만약 첫번째 항만 존재한다면 encoder의 입력값과 decoder의 출력값이 비슷하게 나오더라도 q(z|x)와 p(z)는 유사하지 않을 수도 있다. 하지만 두번째 항이 존재하기 때문에 비슷한 확률분포에서 샘플링된 값을 기반으로 encoder의 입력값과 decoder의 출력값이 비슷해지도록 모델이 학습된다. 이러한 이유로 regularization term이라고 부른다.
+
+### Loss function
+학습에 사용하는 loss 값은 위에서 언급한 reconstruction과 regularization의 부호를 바꾼 ELBO loss값을 사용한다. 이 값을 줄이는 것이 모델의 성능을 높이는 것을 의미하기 때문이다.
+
+Reconstruction error를 줄이는 과정에서 decoder 파라미터가 최적화되고, regularization error를 줄이는 과정에서 encoder의 파라미터가 최적화된다.
+
+1. Encoder가 입력 데이터를 처리하고 z의 평균, 표준편차에 대한 추정값을 출력.
+2. Reparameterization trick을 통해 z의 샘플 생성.
+3. 생성된 샘플 z를 decoder에 입력하고, decoder는 z를 미디 데이터로 변환.
+4. ELBO loss를 계산. 입력 데이터와 출력 데이터의 Binary cross-entropy(reconstruction error)와 encoder가 출력한 z 분포와 prior p(z) 분포 사이의 KL-divergence를 계산.
+5. ELBO loss를 사용하여 encoder, decoder, conductor의 gradient를 계산.
+6. Optimizer를 사용하여 ELBO loss가 최소화 되도록 파라미터 업데이트.
+
+![repara](images/repara.png)
+
+z를 미분하기 위해서 표준정규분포 error(epsilon)항을 도입한다.
+
+z = mu + sigma * eps 로 표현하면 z는 x의 샘플링 여부와 상관없이 표준정규분포에 관한 식으로 취급할 수 있고, 이를 통해 미분이 가능해진다. 이러한 방법을 reparametrization trick이라고 한다.
 
 -------------------------------
 
