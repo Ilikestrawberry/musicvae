@@ -27,6 +27,7 @@
 ## 학습
 ### Variational Autoencoder
 ![vae](images/vae.png)
+
 VAE의 목적은 p(x)를 최대화하는 것을 목적으로 한다. 쉽게 이야기해서 입력 x가 주어졌을 때, z에서 샘플링된 입력값을 받은 decoder가 아웃풋으로 x를 낼 확률을 최대화 하는 것이다.
 
 VAE에서 목적함수는 p(x)이다.
@@ -51,6 +52,7 @@ Conductor를 통해 z가 주어졌을 때 아웃풋이 x가 나올 수 있도록
 
 ## 생성
 ![gen](images/gen.png)
+
 1. Conductor에서 구한 z를 decoder의 입력으로 전달.
 2. Decoder에서 생성된 prob를 output으로 저장.
 3. output에 prob를 반영하여 표시된 512가지 경우 중에 하나를 라벨링.
