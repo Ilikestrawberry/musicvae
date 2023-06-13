@@ -89,10 +89,12 @@ def prepare_data():
     if os.path.isfile("./data/midi_data.pkl"):
         with open("./data/midi_data.pkl", "rb") as f:
             data = pickle.load(f)
+
     elif os.path.isfile("./data/groove"):
         info = pd.read_csv("./data/groove/info.csv")
         file_list = info.midi_filename
         data = data_preprocessing(file_list)
+
     else:
         # groove 데이터가 없는 경우 다운로드
         url = "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0-midionly.zip"
@@ -108,4 +110,4 @@ def prepare_data():
         file_list = info.midi_filename
         data = data_preprocessing(file_list)
 
-        return data
+    return data
