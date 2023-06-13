@@ -3,7 +3,6 @@ import os
 import argparse
 from omegaconf import OmegaConf
 
-import pandas as pd
 from datetime import datetime
 
 import torch
