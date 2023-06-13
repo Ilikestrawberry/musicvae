@@ -32,23 +32,6 @@ DRUM2IDX = {drum: i for i, drum in enumerate(DRUM2MIDI.keys())}
 MIDI2IDX = {midi_num: DRUM2IDX[drum] for drum, midi_nums in DRUM2MIDI.items() for midi_num in midi_nums}
 
 
-def check_time_signature(pm, num=4, denom=4):
-    """
-    midi data에 담겨있는 박자가 전부 4/4 박자인지 확인
-    """
-    sign_list = pm.time_signature_changes
-
-    # 데이터가 비어있는 경우 제외
-    if len(sign_list) == 0:
-        return False
-
-    for sign in sign_list:
-        if sign.numerator != num or sign.denominator != denom:
-            return False
-
-    return True
-
-
 def change_fs(beats, target_beats=16):
     """
     4박(1bar)에 16비트를 담기 위한 샘플링 속도 계산
