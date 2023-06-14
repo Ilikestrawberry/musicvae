@@ -36,7 +36,7 @@ generate
 
 ### 과정
 - Encoder -> Conductor 과정: prior p(z)와 posterior q(z|x)가 최대한 비슷해지도록 파라미터(λ) 학습.
-- Conductor -> Decoder 과정: p(z|x)에서 생성된 값을 decoder에 입력하여 encoder 입력값인 x와 decoder에서 생성된 x'의 차이가 최소화 되도록 파라미터(θ) 학습.
+- Conductor -> Decoder 과정: q(z|x)에서 생성된 값을 decoder에 입력하여 encoder 입력값인 x와 decoder에서 생성된 x'의 차이가 최소화 되도록 파라미터(θ) 학습.
 
 ### 모델 구조
 - Encoder: Bi-LSTM(I.512, H.2048)
@@ -67,10 +67,12 @@ VAE에서 목적함수는 p(x)이다.
 
 이를 풀어쓰면 ELBO 부분과 KL-divergence 부분으로 나누어지는데, KL-divergence는 항상 0보다 같거나 크기 때문에 logp(x) >= ELBO가 성립한다.
 
-즉, ELBO를 최대화하는 것이 p(x)를 최대화 하는 것이다.
+즉, ELBO를 최대화하는 것이 p(x)를 증가시키는 것이다.
 ELBO는 두 개의 항으로 나누어지는데, 첫번째 항은 encoder에 x가 입력됐을 때 decoder에서 x가 재구성되는 것을 의미한다. 이를 reconstruction term이라고 한다.
 
-두번째 항은 encoder를 통해 얻은 q(z|x)와 conductor의 p(z)가 비슷한 정도를 의미한다. 만약 첫번째 항만 존재한다면 encoder의 입력값과 decoder의 출력값이 비슷하게 나오더라도 q(z|x)와 p(z)는 유사하지 않을 수도 있다. 하지만 두번째 항이 존재하기 때문에 비슷한 확률분포에서 샘플링된 값을 기반으로 encoder의 입력값과 decoder의 출력값이 비슷해지도록 모델이 학습된다. 이러한 이유로 regularization term이라고 부른다.
+두번째 항은 encoder를 통해 얻은 q(z|x)와 conductor의 p(z)가 비슷한 정도를 의미한다.
+
+만약 첫번째 항만 존재한다면 encoder의 입력값과 decoder의 출력값이 비슷하게 나오더라도 q(z|x)와 p(z)는 유사하지 않을 수도 있다. 하지만 두번째 항이 존재하기 때문에 비슷한 확률분포에서 샘플링된 값을 기반으로 encoder의 입력값과 decoder의 출력값이 비슷해지도록 모델이 학습된다. 이러한 이유로 regularization term이라고 부른다.
 
 ------------
 
@@ -90,7 +92,7 @@ Reconstruction error를 줄이는 과정에서 encoder와 decoder 파라미터�
 
 z를 미분하기 위해서 표준정규분포 error(epsilon)항을 도입한다.
 
-z = mu + sigma * eps 로 표현하면 z는 x의 샘플링 여부와 상관없이 표준정규분포에 관한 식으로 취급할 수 있고, 이를 통해 미분이 가능해진다. 이러한 방법을 reparametrization trick이라고 한다.
+z = mu + sigma * eps 로 표현하면 z는 x의 샘플링 여부와 관계없이 표준정규분포에 관한 식으로 취급할 수 있고, 이를 통해 미분이 가능해진다. 이러한 방법을 reparametrization trick이라고 한다.
 
 -------------------------------
 
