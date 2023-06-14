@@ -78,7 +78,7 @@ class Trainer:
                 loss = ELBO_loss(pred, batch, mu, std, epoch)
             avg_loss.append(loss.item())
             acc = self.eval_func(pred, batch)
-            iter_bar.set_description("Train Iter (epoch=%5.0f}, acc=%5.5f, loss=%5.3f, lr=%5.5f)" % (epoch, acc.item(), loss.item() / self.batch_size, self.optimizer.param_groups[0]["lr"]))
+            iter_bar.set_description("Train Iter (epoch=%3.0f}, acc=%5.5f, loss=%5.3f, lr=%5.5f)" % (epoch, acc.item(), loss.item() / self.batch_size, self.optimizer.param_groups[0]["lr"]))
             loss.backward()
             self.optimizer.step()
             self.scheduler.step()
