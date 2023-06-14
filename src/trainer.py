@@ -77,7 +77,8 @@ class Trainer:
             if self.criterion == "elbo":
                 loss = ELBO_loss(pred, batch, mu, std, epoch)
             avg_loss.append(loss.item())
-            iter_bar.set_description("Train Iter (lr=%5.5f, loss=%5.3f)" % (self.optimizer.param_groups[0]["lr"], loss.item() / self.batch_size))
+            acc = self.eval_func(pred, batch)
+            iter_bar.set_description("Train Iter (acc=%5.5f, loss=%5.3f, lr=%5.5f)" % (acc.item(), loss.item() / self.batch_size, self.optimizer.param_groups[0]["lr"]))
             loss.backward()
             self.optimizer.step()
             self.scheduler.step()
@@ -86,6 +87,7 @@ class Trainer:
                 wandb.log(
                     {
                         "epoch": epoch,
+                        "accuracy": acc,
                         "train loss": loss,
                         "lr": self.optimizer.param_groups[0]["lr"],
                     }
