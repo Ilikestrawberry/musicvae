@@ -5,9 +5,10 @@
     ┣ config
     ┃ ┗ base_config.yaml
     ┣ data
-    ┃ ┣ groove
+    ┃ ┗ groove
     ┣ images
     ┣ saved_model
+    ┃ ┗ generated.midi
     ┣ src
     ┃ ┣ dataloader.py
     ┃ ┣ loss.py
