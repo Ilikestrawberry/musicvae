@@ -15,6 +15,10 @@ class MusicVAE(nn.Module):
     def __init__(self, conf):
         super().__init__()
         """
+        Encoder(Bi-LSTM)
+        Conductor(LSTM)
+        Decoder(LSTM)
+        
         model의 파라미터 수는 논문에 나온 숫자를 그대로 사용
         dropout은 임의로 추가
         """
@@ -74,7 +78,7 @@ class MusicVAE(nn.Module):
 
     def generate(self, bar_units=16, seq_len=64):
         """
-        정규분포 z를 입력으로 학습된 decoder를 거쳐 midi 생성
+        표준정규분포 z를 입력으로 conductor와 decoder를 거쳐 midi 생성
 
         z shape: (1, 512)
         outputs shape: (1, 64, 512)
@@ -108,7 +112,7 @@ class MusicVAE(nn.Module):
 
 class Encoder(nn.Module):
     """
-    midi 데이터를 학습해 잠재분포(latent_z)를 계산
+    midi 데이터를 학습해 잠재분포(latent_z)를 근사
     """
 
     def __init__(self, input_size, hidden_size, latent_dim, num_layers=2, dropout=0.2):
