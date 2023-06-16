@@ -35,7 +35,7 @@ print("dev_set: ", len(dev_set))
 
 
 def train(conf):
-    train_dataloader = DataLoader(train_set, batch_size=conf.train.batch_size)
+    train_dataloader = DataLoader(train_set, batch_size=conf.train.batch_size, shuffle=True)
     dev_dataloader = DataLoader(dev_set, batch_size=conf.train.batch_size)
 
     model = MusicVAE(conf).to(device)
