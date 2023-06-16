@@ -158,3 +158,23 @@ Conductor를 통해 z가 주어졌을 때 아웃풋이 x와 최대한 비슷하�
 |    19     |   0.144   | 188.389 |
 |    20     |   0.141   | 187.801 |
 | **Eval**  |   0.205   | 180.473 |
+
+
+-------------------------------
+
+## 제출 후 추가
+
+**설정**
+
+- Batch size: 256(train data: 4608(18 batch), valid data: 256).
+- Train data set shuffle, last batch drop.
+- ELBO loss에서 Minimum KL-divergence beta: **0.3** 설정.
+
+**결과**
+
+![result](images/graph.png)
+
+- 60 ~ 70 epoch에서 validation score 가장 높음.
+- Train acc/loss는 학습이 진행될수록 향상.
+- Valid acc/loss는 약 70epoch 이후 감소.
+- 적은 학습 데이터 수로 인해 낮은 epoch에서도 과최적화 발생.
