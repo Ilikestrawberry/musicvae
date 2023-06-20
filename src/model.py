@@ -46,7 +46,8 @@ class MusicVAE(nn.Module):
     def forward(self, x):
         """
         1. input(x)을 받은 encoder에서 잠재분포(latent_z)와 평균(mu), 편차(std)를 반환
-        2. 잠재분포를 전달받은 conductor에서
+        2. z를 전달받은 conductor에서 decoder의 입력을 샘플링
+        3. 입력값을 받은 decoder에서 x'을 출력
 
         input shape: (batch_size, seq_len(64), 512)
         output shape: (batch_size, seq_len, 512)
@@ -124,7 +125,14 @@ class Encoder(nn.Module):
         self.dropout = dropout
         self.num_direction = 2  # Bi-LSTM
 
-        self.encoder = nn.LSTM(batch_first=True, input_size=self.input_size, hidden_size=self.hidden_size, num_layers=self.num_layers, dropout=self.dropout, bidirectional=True)
+        self.encoder = nn.LSTM(
+            batch_first=True,
+            input_size=self.input_size,
+            hidden_size=self.hidden_size,
+            num_layers=self.num_layers,
+            dropout=self.dropout,
+            bidirectional=True,
+        )
         self.mu = nn.Linear(self.hidden_size * self.num_layers * self.num_direction, self.latent_dim)
         self.std = nn.Linear(self.hidden_size * self.num_layers * self.num_direction, self.latent_dim)
         # input 파라미터 정규화
@@ -161,7 +169,14 @@ class Conductor(nn.Module):
         self.num_direction = 1  # 단방향
 
         self.linear = nn.Linear(self.hidden_size, self.con_dim)
-        self.conductor = nn.LSTM(batch_first=True, input_size=self.input_size, hidden_size=self.hidden_size, num_layers=self.num_layers, dropout=self.dropout, bidirectional=False)
+        self.conductor = nn.LSTM(
+            batch_first=True,
+            input_size=self.input_size,
+            hidden_size=self.hidden_size,
+            num_layers=self.num_layers,
+            dropout=self.dropout,
+            bidirectional=False,
+        )
 
     def init_hidden(self, z):
         """
@@ -204,7 +219,14 @@ class Decoder(nn.Module):
         self.num_hidden = self.num_direction * num_layers
 
         self.logits = nn.Linear(self.hidden_size, self.input_size)
-        self.decoder = nn.LSTM(batch_first=True, input_size=self.input_size + self.input_size, hidden_size=self.hidden_size, num_layers=self.num_layers, dropout=self.dropout, bidirectional=False)
+        self.decoder = nn.LSTM(
+            batch_first=True,
+            input_size=self.input_size + self.input_size,
+            hidden_size=self.hidden_size,
+            num_layers=self.num_layers,
+            dropout=self.dropout,
+            bidirectional=False,
+        )
 
     def forward(self, x, h, c, z):
         # x shape: (batch_size, 1, 512*2) => 직전 note와 conductor에서 생성된 z를 합쳐서 입력으로 사용
