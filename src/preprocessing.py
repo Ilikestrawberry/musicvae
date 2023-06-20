@@ -34,10 +34,10 @@ MIDI2IDX = {midi_num: DRUM2IDX[drum] for drum, midi_nums in DRUM2MIDI.items() fo
 
 def change_fs(beats, target_beats=16):
     """
-    4박(1bar)에 16비트를 담기 위한 샘플링 속도 계산
-    ex) change_fs = 8 => 1초에 8비트
+    1박에 16비트를 담기 위한 샘플링 속도 계산
+    window_size=64이고 1박에 16비트
 
-    논문 figure 2의 output에서 1bar 당 16비트이기 때문에 target_beats = 16으로 설정
+    ex) change_fs = 8 => 1초에 8비트 => 1박에 2초/1마디에 8초
     """
     quarter_length = beats[1] - beats[0]
     changed_length = (quarter_length * 4) / target_beats
