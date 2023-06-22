@@ -36,7 +36,8 @@ def change_fs(beats, target_beats=16):
     """
     1박에 16비트를 담기 위한 샘플링 속도 계산
     window_size=64이고 1박에 16비트
-
+    target_beats: conductor에서 생성한 z(feat)를 입력할 길이 단위
+    ex) target_beats = 32 => 32(2박자)비트 마다 decoder에 z(feat) 입력
     ex) change_fs = 8 => 1초에 8비트 => 1박에 2초/1마디에 8초
     """
     quarter_length = beats[1] - beats[0]
