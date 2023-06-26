@@ -121,13 +121,13 @@ Conductor를 통해 z가 주어졌을 때 아웃풋이 x와 최대한 비슷하�
 
 -------------------------------
 
+## 결과
+
 **설정**
 
 - Batch size: 256(train data: 4608(18 batch), valid data: 256).
 - Train data set shuffle, last batch drop.
 - ELBO loss에서 Minimum KL-divergence beta: **0.3** 설정.
-
-**결과**
 
 ![result](images/graph.png)
 
